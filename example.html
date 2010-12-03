@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ <title>jQuery.pidCrypt plugin demo</title>
+ <!-- jQuery libraries -->
+ <script src="jquery-1.4.3.min.js"></script>
+ <!-- pidCrypt RSA libraries -->
+ <script src="pidCrypt/pidcrypt.js"></script>
+ <script src="pidCrypt/pidcrypt_util.js"></script>
+ <script src="pidCrypt/base64.js"></script>
+ <script src="pidCrypt/md5.js"></script>
+ <script src="pidCrypt/asn1.js"></script>
+ <script src="pidCrypt/jsbn.js"></script>
+ <script src="pidCrypt/rng.js"></script>
+ <script src="pidCrypt/prng4.js"></script>
+ <script src="pidCrypt/rsa.js"></script>
+ <!-- pidCrypt AES-CBC libraries -->
+ <script src="pidCrypt/aes_core.js"></script>
+ <script src="pidCrypt/aes_cbc.js"></script>
+ <!-- jQuery.pidCrypt plugin library -->
+ <script src="jquery.pidCrypt.js"></script>
+ <script>
+  var $j = jQuery.noConflict();
+  $j(document).ready(function() {
+   $j('#theForm').pidCrypt({decrypt:true,debug:true});
+  });
+ </script>
+ <style>
+  .col1 { text-align: right; width: 200px; margin: 0; float: left; margin: 2px 2px 2px 2px; }
+  .col2 { width: 300px; display: block; float: left; padding: 2px 2px 2px 5px; word-wrap: break-word; }
+  .col3 { width: 25px; display: block; float: left; padding: 2px 2px 2px 5px; }
+  .col1-details { text-align: right; width: 200px; margin: 0; float: left; margin: 2px 2px 2px 2px; }
+  .col2-details { width: 20px; display: block; float: left; padding: 2px 2px 2px 5px; }
+  div.row { clear: both; width: 800px; }
+  #debug { width: 936px; display: block; float: left; padding: 2px 2px 2px 5px;word-wrap: break-word; }
+  div.row-details { clear: both; width: 800px; }
+  submit { height: 29px; width: 330px; padding-top: 5px; clear: both; } 
+  input { background-color: #fff; font: 11px/14px "Lucida Grande", "Trebuchet MS", Arial, Helvetica, sans-serif; margin: 4px 0 5px 8px; padding: 1px; border: 1px solid #000; }
+  textarea { border: 1px solid #000; background-color: #fff; font: 11px/14px "Lucida Grande", "Trebuchet MS", Arial, Helvetica, sans-serif; margin: 4px 0 5px 8px; }
+ </style>
+</head>
+<body>
+ <h3><strong>jQuery pidCrypt plugin demo</strong></h3>
+ <form id="theForm" class="theForm" method="post" action="proxy.php">
+  <noscript><h4>Demo will not work because JavaScript is disabled</h4></noscript>
+  <fieldset>
+   <legend><strong>Enter your credit card information</strong></legend>
+   <div class="row">
+    <label class="col1">Name:</label>
+    <span class="col2"><input name="name" id="name" type="text" maxlength="87" size="20" class="data" /></span>
+    <div class="col3" id="name-err"></div>
+   </div>
+   <div class="row">
+    <label class="col1">Email:</label>
+    <span class="col2"><input name="email" id="email" type="text" maxlength="87" size="20" class="data" /></span>
+    <div class="col3" id="email-err"></div>
+   </div>
+   <div class="row">
+    <label class="col1">MasterCard</label>
+    <span class="col2"><input name="type" id="type" value="mastercard" type="radio" class="data" /></span>
+    <div class="col3" id="mastercard-err"></div>
+   </div>
+    <div class="row">
+    <label class="col1">Visa</label>
+    <span class="col2"><input name="type" id="type" value="visa" type="radio" class="data" /></span>
+    <div class="col3" id="visa-err"></div>
+   </div>
+   <div class="row">
+    <label class="col1">American Express</label>
+    <span class="col2"><input name="type" id="type" value="american-express" type="radio" class="data" /></span>
+    <div class="col3" id="american-express-err"></div>
+   </div>
+    <div class="row">
+    <label class="col1">Card number:</label>
+    <span class="col2"><input type="text" name="card-number" id="card-number" maxlength="87" size="20" class="data" /></span>
+    <div class="col3" id="card-number-err"></div>
+   </div>
+   <div class="row">
+    <label class="col1">Comments:</label> 
+    <span class="col2"><textarea name="comments" id="comments" cols="26" rows="3" class="data"></textarea></span>
+    <div class="col3" id="comments-err"></div>
+   </div>
+   <div class="row">
+    <label class="col1">&nbsp;</label>
+    <span class="col2"><input value="Encrypt &amp; send (Live submit)" id="send" TYPE="submit" /></span>
+   </div>
+  </fieldset>
+ </form>
+ <br/>
+ <fieldset>
+  <legend><strong>Cipher text before sending to server</strong></legend>
+  <div class="row">
+   <label class="col1">Name:</label>
+   <div class="col2" id="name-enc"></div>
+  </div>
+  <div class="row">
+   <label class="col1">Email:</label>
+   <div class="col2" id="email-enc"></div>
+  </div>
+  <div class="row">
+   <label class="col1">Card number:</label>
+   <div class="col2" id="card-number-enc"></div>
+  </div>
+  <div class="row">
+   <label class="col1">Comments:</label>
+   <div class="col2" id="comments-enc"></div>
+  </div>
+ </fieldset>
+ <br/>
+ <fieldset>
+  <legend><strong>Deciphered text after receiving from server</strong></legend>
+  <div class="row">
+   <label class="col1">Name:</label>
+   <div class="col2" id="name-denc"></div>
+  </div>
+  <div class="row">
+   <label class="col1">Email:</label>
+   <div class="col2" id="email-denc"></div>
+  </div>
+  <div class="row">
+   <label class="col1">Card number:</label>
+   <div class="col2" id="card-number-denc"></div>
+  </div>
+  <div class="row">
+   <label class="col1">Comments:</label>
+   <div class="col2" id="comments-denc"></div>
+  </div>
+ </fieldset>
+ <fieldset>
+  <legend>Debug Information</legend>
+  <div id="debug"></div>
+ </fieldset>
+</body>
+</html>

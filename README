@@ -1,0 +1,71 @@
+
+ jQuery.pidCrypt
+  A plugin to make easy implementation of the pidCrypt libraries for public
+  key encryption prior to form submissions
+
+ FEATURES:
+ - Requests OpenSSL private/public key from server or searches local
+   storage (local, session or cookie)
+ - Private key generated is registered as a session variable
+   associated with computer IP
+ - Private key is also password protected with comptuters IP address
+ - Private key is stored in HTML5 localStorage, sessionStorage or a cookie
+ - Dynamically parses specified HTML form elements and applies
+   public key RSA encryption when submitted
+
+ REQUIREMENTS:
+ - pidCrypt library https://www.pidder.com/pidcrypt/
+ - jQuery cookie plugin http://plugins.jquery.com/files/jquery.cookie.js.txt (optional)
+
+ OPTIONS:
+ - name:    Unique identifier for storage mechanism
+ - key:     If visiting user has a private key on the server you can assign this
+            dynamically with their public key
+ - bits:    Default is 256. 128, 192 & 256 are supported values. This is used ONLY
+            when the 'where' configuration option is set to decrypt on the client.
+ - proxy:   Server location (defaults to form action attribute)
+ - storage: HTML5 localStorage, sessionStorage and cookies supported
+ - type:    Default is asymmetric. Alternative option is symmetric.
+            WARNING: If this is set to symmetric AES-CBC encryption
+            is used and a SSL connection is recommended
+ - encode:  Default is false. Set this to true if experiencing decryption problems
+ - decrypt: Allows for decrypted data on server to be sent back to client (recommended only for demo puposes)
+ - debug:   Default is false. Set this to true if you wish to see output of the
+            processing. Not for production use.
+ 
+ Author: Jason Gerfen
+ Email: jason.gerfen@gmail.com
+ Copyright: Jason Gerfen
+ License: GPL
+
+ EXAMPLE USAGE:
+ - Default
+  $('#form').pidCrypt();
+
+ - Public key already exists for user on server (using php)
+  $('#form').pidCrypt({key:'<?php echo $key; ?>'});
+
+ - Using custom identifier for storage key (default is 'jQuery.pidCrypt')
+  $('#form').pidCrypt({name:'myWebSiteName'});
+
+ - Specify an alternate proxy location (same origin restrictions apply)
+  $('#form').pidCrypt({proxy:'path/to/proxy-file'});
+
+ - Using HTML5 sessionStorage (defaults to HTML5 localStorage)
+  $('#form').pidCrypt({storage:'sessionStorage'});
+
+ - Using cookies (Must use jQuery cookie plugin)
+  $('#form').pidCrypt({storage:'cookie'});
+
+ - Symmetric encryption usage (WARNING: This functionality should be wrapped in an SSL connection)
+  $('#form').pidCrypt({type:'symmetric'});
+
+ - Symmetric encryption with alternate key size (128, 192 & 256 allowed)
+  $('#form').pidCrypt({where:'client',bits:192});
+
+ - Enable encoding of data (Might help decryption problems)
+  $('#form').pidCrypt({encoding:true});
+
+ - Enable debugging output
+  $('#form').pidCrypt({debug:true});
+
