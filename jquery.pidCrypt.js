@@ -37,6 +37,8 @@
  * Copyright: Jason Gerfen
  *
  * License: GPL
+*
+* Fixes and updates  by Kosso
  *
  */
 
@@ -226,10 +228,11 @@
   return ((string=='false')||(string.length==0)||(!string)||(string==null)||(string=='')||(typeof string=='undefined')) ? false : true;
  }
 
- /* validate localStorage/localSession functionality */
+ /* validate localStorage/sessionStorage functionality */
  $.validateStorage = function(type) {
-  return ((window.type)&&(typeof type=='function')) ? true : false;
+    return ((window[type])&&(typeof window[type]=='object')) ? true : false;
  }
+
 
  /* split string if greater then bits allow for RSA limitations */
  $.strLength = function(name, str, options) {
