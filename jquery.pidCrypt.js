@@ -271,7 +271,7 @@
    pidCrypt.RSA.prototype.setPublicKeyFromASN(tree);
   }
   /* begin looping over form elements and encrypting */
-  $.each($('#'+form+' :text, :password, :file, input:checkbox:checked, input:radio:checked, textarea'), function(k, v){
+  $.each($('#'+form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea'), function(k, v){
    if ($.validateString(v.value)!==false) {
     /* check string length based on bit length */
     var y = (options.type=='asymmetric') ? $.strLength(v.name, v.value, options) : v.value;
