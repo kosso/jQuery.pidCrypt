@@ -119,11 +119,14 @@
   switch(type) {
    case 'localStorage':
     x = $.setLocal(name, key);
+   break;
    case 'sessionStorage':
     x = $.setSession(name, key);
+    break;  
    case 'cookie':
     x = $.setCookie(name, key);
-   default:
+   break; 
+  default:
     x = $.setLocal(name, key);
   }
   return x;
@@ -136,10 +139,13 @@
   switch(type) {
    case 'localStorage':
     x = $.getLocal(name);
+   break;
    case 'sessionStorage':
     x = $.getSession(name);
+   break;
    case 'cookie':
     x = $.getCookie(name);
+   break;
    default:
     x = $.getLocal(name);
   }
